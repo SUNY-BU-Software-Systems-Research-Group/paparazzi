@@ -123,7 +123,7 @@ let logger = fun () ->
     Unix.mkdir logs_path 0o755
   end;
   let log_name = if (!log_name_arg = "") then sprintf "%s.log" basename else sprintf "%s__%s.log" !log_name_arg basename in
-  let data_name = if (!log_name_arg = "") then sprintf "%s.data" basename else sprintf "%s__%s.log" !log_name_arg basename in 
+  let data_name = if (!log_name_arg = "") then sprintf "%s.data" basename else sprintf "%s__%s.data" !log_name_arg basename in 
   let f = open_out (logs_path // log_name) in
   (* version string with whitespace/newline at the end stripped *)
   output_string f ("<!-- logged with runtime paparazzi_version " ^  Env.get_paparazzi_version () ^ " -->\n");
