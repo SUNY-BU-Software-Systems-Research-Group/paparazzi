@@ -101,17 +101,19 @@ def run_all_aircrafts():
     SIM_PROCS = []
     KAZE_PROCS = []
     for i in range(0, NUMBER_ACS):
-        #KAZE_PROCS.append(kaze.Kaze(args.windpath[i-1], args.timescale, args.ircontrast, args.genrandwinds, args.maxspeed, args.mindt, args.maxdt, args.numwinds, PPRZLINK_PORT+i))
-        #KAZE_PROCS[i-1].start()
+        log_opt = " -l " + args.AC_NAME + "_nowind"
         if i is not 0:
             gen_option = " -gen " if args.genrandwinds else "" 
-            kaze_cmd = "python3 kaze.py "+str(args.windpath[i-1])+" -ts "+str(args.timescale)+" -ir "+str(args.ircontrast)+gen_option+"-p "+str(PPRZLINK_PORT+i)+" -s "+str(args.maxspeed)+" -max "+str(args.maxdt)+" -min "+str(args.mindt)+" -n "+str(args.numwinds)
+            kaze_cmd = "python3 kaze.py "+str(args.windpath[i-1])+" -ts "+str(args.timescale)+" -ir "+str(args.ircontrast)+gen_option+"-p "+str(PPRZLINK_PORT+(2*i))+" -s "+str(args.maxspeed)+" -max "+str(args.maxdt)+" -min "+str(args.mindt)+" -n "+str(args.numwinds)
             KAZE_THREAD = subprocess.Popen(kaze_cmd.split(' '), start_new_session=True)
             KAZE_PROCS.append(KAZE_THREAD)
-        sim_cmd = "python3 run_aircraft.py -a " + args.AC_NAME +"_" + str(i+1) + " -p " + str(PPRZLINK_PORT+i) + " -i " + str(int(args.AC_ID) + i)
+            log_opt = " -l " + args.AC_NAME + "_" + args.windpath[i-1]
+        sim_cmd = "python3 run_aircraft.py -a " + args.AC_NAME +"_" + str(i+1) + " -p " + str(PPRZLINK_PORT+(2*i)) + " -i " + str(int(args.AC_ID) + i) + log_opt
         print(sim_cmd) 
         SIM_THREAD = subprocess.Popen(sim_cmd.split(' '), start_new_session=True)
-        SIM_PROCS.append(SIM_THREAD)    
+        SIM_PROCS.append(SIM_THREAD)
+        #sleep so log plotter can identify the right data file to log file
+        time.sleep(2)
     for i in range(0, NUMBER_ACS):
         SIM_PROCS[i].wait()
     for i in range(0, len(KAZE_PROCS)):

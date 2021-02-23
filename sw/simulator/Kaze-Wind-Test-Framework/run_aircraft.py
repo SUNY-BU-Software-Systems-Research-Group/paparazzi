@@ -9,7 +9,7 @@ parser=argparse.ArgumentParser()
 parser.add_argument("-a", "--aircraft", dest="AIRCRAFT", default="ardrone2_1")
 parser.add_argument("-t", "--type", dest="SIM_TYPE", default="nps")
 parser.add_argument("-i", "--acid", help="aircraft ID", dest='acid', default=1, type=int)
-parser.add_argument("-n", "--numaircrafts", dest="num_aircrafts", default=1, type=int)
+parser.add_argument("-l", "--logname", dest="LOG_NAME")
 parser.add_argument("-p", "--port", dest="port", default="2010", type=str)
 args=parser.parse_args()
 PPRZ_HOME = os.getenv("PAPARAZZI_HOME", os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), './')))
@@ -51,14 +51,14 @@ def kill_simulation():
 		SIM_LINK.terminate()
 
 def run_simulation1():
-	global SIM_SITL, SIM_SERVER, SIM_LINK
-	sim_cmd = PPRZ_HOME+"/sw/simulator/pprzsim-launch -a "+args.AIRCRAFT +" -t nps -b 127.255.255.255:"+args.port
-	SIM_SITL = subprocess.Popen(sim_cmd.split(' '), start_new_session=True)
-	server_cmd = PPRZ_HOME+"/sw/ground_segment/tmtc/server -b 127.255.255.255:"+args.port
-	SIM_SERVER = subprocess.Popen(server_cmd.split(' '), start_new_session=True)
-	link_cmd = PPRZ_HOME+"/sw/ground_segment/tmtc/link -udp  -b 127.255.255.255:" + args.port + " -udp_port "+ str(int(args.port)+2232) + " -udp_uplink_port " + str(int(args.port)+2233)
-	SIM_LINK = subprocess.Popen(link_cmd.split(' '), start_new_session=True)
-	SIM_PROCS.append([SIM_SITL, SIM_SERVER, SIM_LINK])
+    global SIM_SITL, SIM_SERVER, SIM_LINK
+    sim_cmd = PPRZ_HOME+"/sw/simulator/pprzsim-launch -a "+args.AIRCRAFT +" -t nps -b 127.255.255.255:"+args.port
+    SIM_SITL = subprocess.Popen(sim_cmd.split(' '), start_new_session=True)
+    server_cmd = PPRZ_HOME+"/sw/ground_segment/tmtc/server -log_name "+args.LOG_NAME+ " -b 127.255.255.255:"+args.port
+    SIM_SERVER = subprocess.Popen(server_cmd.split(' '), start_new_session=True)
+    link_cmd = PPRZ_HOME+"/sw/ground_segment/tmtc/link -udp  -b 127.255.255.255:" + args.port + " -udp_port "+ str(int(args.port)+2232) + " -udp_uplink_port " + str(int(args.port)+2233)
+    SIM_LINK = subprocess.Popen(link_cmd.split(' '), start_new_session=True)
+    SIM_PROCS.append([SIM_SITL, SIM_SERVER, SIM_LINK])
 
 
 def main():
