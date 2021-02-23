@@ -1,0 +1,4 @@
+ivy-python==3.2
+lxml==4.6.2
+numpy==1.19.5
+pkg-resources==0.0.0

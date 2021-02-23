@@ -1,0 +1,7 @@
+WORLD_ENV message was defined by gaia. (GAIA - http://wiki.paparazziuav.org/wiki/New_Gaia)
+paparazzi/sw/simulator/nps/nps_ivy.c specifies how to parse the message
+paparazzi/sw/simulator/gaia.ml src code for the wind simulator located under tools in paparazzi
+paparazzi/sw/simulator/nps/nps_fdm_jsbsim.cpp is the only sim that uses WORLD_ENV (default sim)
+paparazzi/sw/simulator/nps/nps_atmosphere.c has a macro to define the frequency to send the request
+also in nps_atmo is a macro to define turbulance (set to 0)
+the update function updates turb to the set turb but could be another field in input file (requires modification of world_env message)

@@ -1,0 +1,7 @@
+start VcXsrv X Server
+start ubuntu 18
+cd paparazzi
+./paparazzi &
+
+source ~/paparazzi/sw/simulator/Kaze-Wind-Test-Framework/venv/bin/activate
+python ~/paparazzi/sw/simulator/Kaze-Wind-Test-Framework/main.py -h
